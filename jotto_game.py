@@ -21,7 +21,7 @@ class JottoGame(object):
         return len(set(word1).intersection(set(word2)))
 
     def start(self, p1, p2):
-        """Starts the game with players p1 & p2"""
+        """Starts the game with players p1 & p2. returns the winning player"""
 
         # Players are given their word list & select their secret words
         p1_secret = p1.select_a_secret_word(self.word_list[:])
@@ -40,7 +40,12 @@ class JottoGame(object):
         # Start the game loop
         while True:
             # Player guesses a word
-            guess = guesser.guess_a_word()
+            guess = guesser.guess_a_word().upper()
+            if guess not in self.word_list:
+                print("{})\t{} guessed '{}' - INVALID WORD - AUTOMATIC "
+                      "FORFEIT!".format(turn, guesser.name, guess))
+                return sleeper
+
             score = JottoGame.compare_words(guess, sleeper_secret)
             print("{})\t{} guessed '{}' - {}".format(
                 turn, guesser.name, guess, score))
@@ -50,8 +55,9 @@ class JottoGame(object):
                 print("{} WINS after {} turn(s)".format(guesser.name, turn))
                 return guesser
             else:
-                # Inform the player of the match value
+                # Inform the players of the results
                 guesser.store_word_result(guess, score)
+                sleeper.your_opponent_guessed(guess, score)
 
             # Swap roles
             guesser, sleeper = sleeper, guesser

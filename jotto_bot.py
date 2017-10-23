@@ -21,5 +21,10 @@ class JottoBot(object):
         return random.SystemRandom().choice(self.word_list)
 
     def store_word_result(self, word, value):
-        """Invoked when receiving a word result"""
+        """Invoked when receiving a word result from your own guess"""
+        pass
+
+    def your_opponent_guessed(self, word, value):
+        """Invoked when opponent makes a guess, allowing you to 'listen' to
+        your opponents guesses."""
         pass
